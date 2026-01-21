@@ -1,18 +1,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  signInWithRedirect, 
-  getRedirectResult 
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithRedirect,
+  getRedirectResult,
+  onAuthStateChanged,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-import { 
-  getFirestore, 
-  doc, 
-  setDoc, 
-  getDoc 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+
 const firebaseConfig = {
   apiKey: "AIzaSyCaM8F7hhpUxeylhT6WiBdWMbmshl1AYMg",
   authDomain: "cafeteria-australiana.firebaseapp.com",
@@ -21,49 +17,51 @@ const firebaseConfig = {
   messagingSenderId: "1032577129093",
   appId: "1:1032577129093:web:51c8e186095ee362d867ec",
   measurementId: "G-EBCZMDZRVP"
-};
+}
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-const db = getFirestore(app);
 const provider = new GoogleAuthProvider();
 
-// 👉 BOTÓN GOOGLE
-window.loginGoogle = function () {
-  signInWithRedirect(auth, provider);
-};
 
-// 👉 CUANDO REGRESA DE GOOGLE
-getRedirectResult(auth)
-  .then(async (result) => {
-    if (result && result.user) {
-      const user = result.user;
-
-      const ref = doc(db, "usuarios", user.uid);
-      const snap = await getDoc(ref);
-
-      if (!snap.exists()) {
-        await setDoc(ref, {
-          nombre: user.displayName,
-          email: user.email,
-          puntos: 0
-        });
-      }
-
-      document.querySelector("#userName").innerText = user.displayName;
-      show("panel");
-      cargarPuntos(user.uid);
-    }
-  })
-  .catch((error) => {
-    console.error(error);
-    alert("Error al iniciar sesión");
+const loginBtn = document.getElementById("loginGoogle");
+if (loginBtn) {
+  loginBtn.addEventListener("click", () => {
+    signInWithRedirect(auth, provider);
   });
-
-async function cargarPuntos(uid) {
-  const ref = doc(db, "usuarios", uid);
-  const snap = await getDoc(ref);
-  if (snap.exists()) {
-    document.querySelector("#points").innerText = snap.data().puntos + " pts";
-  }
 }
+
+
+const logoutBtn = document.getElementById("logout");
+if (logoutBtn) {
+  logoutBtn.addEventListener("click", async () => {
+    await signOut(auth);
+    location.reload();
+  });
+}
+
+
+onAuthStateChanged(auth, (user) => {
+  const loginSection = document.getElementById("login");
+  const panelSection = document.getElementById("panel");
+
+  if (user) {
+  
+    if (loginSection) loginSection.style.display = "none";
+    if (panelSection) panelSection.style.display = "block";
+
+
+    const nombre = document.getElementById("nombreUsuario");
+    if (nombre) nombre.textContent = user.displayName || "Cliente";
+
+  } else {
+
+    if (loginSection) loginSection.style.display = "block";
+    if (panelSection) panelSection.style.display = "none";
+  }
+});
+
+
+getRedirectResult(auth).catch((error) => {
+  console.error("Error en redirect:", error);
+});
