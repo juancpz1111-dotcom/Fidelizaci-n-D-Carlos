@@ -1,43 +1,51 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Programa de Fidelización</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title> D-Carlos | Fidelización</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="card" id="home">
- <h2>☕ Café Aroma</h2>
-  <p>Bienvenido a nuestro programa de fidelización de la cafeteria Australiana ☕</p>
-  <button onclick="show('register')">Registrarse</button>
-  <button onclick="show('panel')">Iniciar sesión</button>
-</div>
+  <!-- 🏠 HOME -->
+  <div class="card" id="home">
+    <h2>☕ D-Carlos </h2>
+    <p>Bienvenido a nuestro programa de fidelización</p>
+    <button onclick="loginGoogle()">Entrar con Google</button>
+  </div>
 
-<div class="card hidden" id="register">
-  <h2>Registro</h2>
-  <input placeholder="Nombre">
-  <input placeholder="Correo">
-  <input placeholder="Teléfono">
-  <button onclick="show('panel')">Registrarme</button>
-</div>
+  <!-- 📊 PANEL -->
+  <div class="card hidden" id="panel">
+    <h2>Hola, <span id="userName">Cliente</span> ☕</h2>
+    <p>Tus puntos acumulados</p>
+    <h3 id="points">0 pts</h3>
+    <button onclick="show('canje')">Canjear puntos</button>
+  </div>
 
-<div class="card hidden" id="panel">
-  <h2>Hola, Usuario</h2>
-  <p>Puntos acumulados:</p>
-  <h3>120 pts</h3>
-  <button onclick="show('canje')">Canjear puntos</button>
-</div>
+  <!-- 🎁 CANJE -->
+  <div class="card hidden" id="canje">
+    <h2>🎁 Canje de premios</h2>
+    <ul>
+      <li>☕ Café gratis — 100 pts</li>
+      <li>🥐 Café + croissant — 200 pts</li>
+    </ul>
+    <button onclick="show('panel')">Volver</button>
+  </div>
 
-<div class="card hidden" id="canje">
-  <h2>Canje de premios</h2>
-  <ul>
-    <li>Descuento 10% (10 pts)</li>
-    <li>Producto gratis (200 pts)</li>
-  </ul>
-  <button>Canjear</button>
-</div>
+  <!-- ⚙️ SCRIPT -->
+  <script>
+    // 🔁 Cambio de pantallas (NO Firebase)
+    function show(id) {
+      document.querySelectorAll('.card').forEach(div => {
+        div.classList.add('hidden');
+      });
+      document.getElementById(id).classList.remove('hidden');
+    }
+  </script>
 
-<script type="module" src="script.js"></script>
+  <!-- 🔥 Firebase (OBLIGATORIO type="module") -->
+  <script type="module" src="script.js"></script>
+
 </body>
 </html>
