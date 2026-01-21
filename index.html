@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Programa de Fidelización</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="card" id="home">
+  <h2>LOGO DEL NEGOCIO</h2>
+  <p>Bienvenido al programa de fidelización</p>
+  <button onclick="show('register')">Registrarse</button>
+  <button onclick="show('panel')">Iniciar sesión</button>
+</div>
+
+<div class="card hidden" id="register">
+  <h2>Registro</h2>
+  <input placeholder="Nombre">
+  <input placeholder="Correo">
+  <input placeholder="Teléfono">
+  <button onclick="show('panel')">Registrarme</button>
+</div>
+
+<div class="card hidden" id="panel">
+  <h2>Hola, Usuario</h2>
+  <p>Puntos acumulados:</p>
+  <h3>120 pts</h3>
+  <button onclick="show('canje')">Canjear puntos</button>
+</div>
+
+<div class="card hidden" id="canje">
+  <h2>Canje de premios</h2>
+  <ul>
+    <li>Descuento 10% (100 pts)</li>
+    <li>Producto gratis (200 pts)</li>
+  </ul>
+  <button>Canjear</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
